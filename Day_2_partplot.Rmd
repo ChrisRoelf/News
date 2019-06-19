@@ -1,0 +1,80 @@
+---
+title: "Graphics with ggplot2"
+author: "Chris Roelfsema"
+date: "11/08/2019"
+output: html_document
+---
+
+# Learning ggplot2
+
+We're learning ggplot2 It's going to be amazing. 
+# Load tideverse to clean up data if needed
+```{r}
+library(tidyverse)
+```
+
+
+# Load the data from github  
+
+```{r}
+ohi_data <- read_csv("https://raw.githubusercontent.com/OHI-Science/data-science-training/master/data/OHI_global_data.csv")
+```
+
+
+# create the plot
+```{r start plot data}
+ggplot(data = ohi_data, aes(x = OHI_score, y = HDI))
+ggplot(data = ohi_data, aes(x = georegion_one, y =OHI_score)) + geom_point()
+ggplot(data = ohi_data, aes(x = georegion_one, y =OHI_score)) + geom_jitter(width=0.2)
+```
+
+Boxplot
+```{r}
+ggplot(data = ohi_data, aes(x = georegion_one)) + geom_bar()
+```
+
+Histogram
+```{r}
+ggplot(data = ohi_data, aes(x = HDI)) + geom_histogram()
+```
+
+Combine
+```{r}
+ggplot(data = ohi_summary, aes(x = georegions, y = OHI_score_average)) + geom_bar(stat="identity") + geom_jitter(data=ohi_data, aes(x=georegion_one, y=OHI_score))
+```
+```{r}
+ggplot(data = ohi_data, aes(y=OHI_score, x = HDI, color=georegion_one)) + geom_point()
+
+# creat bubbles instead of colours
+# ggplot(data = ohi_data, aes(x = OHI_score, y = HDI, size = coastal_pop)) + geom_point()
+
+```
+
+Themes
+```{r}
+source('https://raw.githubusercontent.com/OHI-Science/ohiprep/master/src/R/scatterTheme.txt')       
+
+ggplot(data = ohi_data, aes(x = OHI_score, y = HDI)) + geom_point() + scatterTheme
+ggplot(data = ohi_data, aes(x = OHI_score, y = HDI, label=country)) + 
+  geom_point(aes(x = OHI_score, y = HDI))
+ggplot(data = ohi_data, aes(x = OHI_score, y = HDI)) +  
+  geom_point() +
+  theme_bw()
+```
+
+Add text
+```{r}
+ggplot(data = ohi_data, aes(y = OHI_score, x = HDI, color=georegion_one)) +
+  geom_point() +
+  labs(y = "OHI score, 2017", 
+       x = "Human Development Index",
+       title = "Countries with high human development have more sustainable oceans",
+       color = "Georegion") # if color doesn't work, use "fill" theme_bw()
+```
+Add colour
+```{r}
+library("RColorBrewer")
+library("colorspace")
+
+```
+
